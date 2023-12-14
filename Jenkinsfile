@@ -1,42 +1,38 @@
-pipeline {
-    options {
-        timestamps()
-    }
+pipeline{
+    options{timestamps() }
 
     agent none
-
-    stages {
+    stages{
         stage('Check scm') {
             agent any
-            steps {
+            steps{
                 checkout scm
             }
         }
-
+        
         stage('Build'){
             steps{
-                echo "Building ...${BUILD_NUMBER}"
+                echo "Building...${BUILD_NUMBER}"
                 echo "Build completed"
             }
         }
 
-        stage('Test') {
-            agent {
+        stage('Test'){
+            agent{
                 docker {
                     image 'alpine'
                     args '-u=root'
                 }
             }
-            steps {
+            steps{
                 sh 'apk add --update python3 py-pip'
                 sh 'pip install unittest2==1.1.0'
-                // sh 'pip install --upgrade pip wheel setuptools requests'
+                sh 'pip install Flask'
                 sh 'pip install xmlrunner'
-                sh 'python3 test.py'
+                sh 'python3 app_test.py'
             }
-            
-            post {
-                always {
+            post{
+                always{
                     junit 'test-reports/*.xml'
                 }
                 success {
@@ -44,20 +40,6 @@ pipeline {
                 }
                 failure {
                     echo "Tests failed."
-                }
-            }
-        }
-        stage('Build and Push Docker Image') {
-            steps {
-                script {
-                    // Build Docker image
-                    def DOCKER_IMAGE = 'anne738/my-repo'
-                    sh "docker build -t ${DOCKER_IMAGE} -f Dockerfile ."
-
-                    withCredentials([usernamePassword(credentialsId: 'LandPDOCKER', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
-                    sh 'docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD'
-                    }
-                    sh "docker push ${DOCKER_IMAGE}"
                 }
             }
         }
