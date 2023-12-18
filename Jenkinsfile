@@ -17,32 +17,29 @@ pipeline{
             }
         }
 
-        stage('Test'){
-            agent{
-                docker {
-                    image 'alpine'
-                    args '-u=root'
-                }
-            }
+        stage('Test') {
+            agent { docker { image 'alpine'
+                    args '-u=\"root\"'
+                    }
+                  }
             steps {
-                script {
-                    sh 'apk add --update python3 py3-pip'
-                    //sh 'pip install Flask xmlrunner'
-                    sh 'python3 app_test.py'
-                }
-            }
-
-            post{
-                always{
+                sh 'apk add --update python3 py-pip'
+                sh 'pip install Flask'
+                sh 'pip install xmlrunner'
+                sh 'python3 app_test.py'
+            } 
+            post {
+                always {
                     junit 'test-reports/*.xml'
-                }
+                    echo "Test-reports-here"
+                }   
                 success {
-                    echo "Application testing successfully completed"
+                    echo "Application testing successfully completed "
                 }
                 failure {
-                    echo "Tests failed."
+                    echo "Ooooppss!!! Tests failed!"
                 }
-            }
+            }     
         }
     }
 }
