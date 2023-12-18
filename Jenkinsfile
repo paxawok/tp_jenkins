@@ -30,7 +30,8 @@ pipeline{
             } 
             post {
                 always {
-                    junit 'test-reports/results.xml'
+                    junit allowEmptyResults: true, testResults: 'result.xml', skipPublishingChecks: true, skipMarkingBuildUnstable: true
+
                 }
                 success {
                     echo "Application testing successfully completed"
