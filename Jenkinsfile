@@ -24,13 +24,14 @@ pipeline{
                     args '-u=root'
                 }
             }
-            steps{
-                sh 'apk add --update python3 py-pip'
-                //sh 'pip install unittest'
-                sh 'pip install Flask'
-                sh 'pip install xmlrunner'
-                sh 'python3 app_test.py'
+            steps {
+                script {
+                    sh 'apk add --update python3 py3-pip'
+                    sh 'pip install Flask xmlrunner'
+                    sh 'python3 app_test.py'
+                }
             }
+
             post{
                 always{
                     junit 'test-reports/*.xml'
