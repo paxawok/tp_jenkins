@@ -44,8 +44,8 @@ pipeline{
         stage('Docker login') {
             agent any
             steps {
-                withCredentials([usernamePassword(credentialsId: 'ilovemyPASSWORD', variable: 'DOCKER_PASSWORD')]) {
-                    sh 'docker login -u paxawok -p $DOCKER_PASSWORD'
+                withCredentials([usernamePassword(credentialsId: 'ilovemyPASSWORD', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                 }
             }
         }
