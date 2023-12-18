@@ -24,7 +24,7 @@ pipeline{
                   }
             steps {
                 sh 'apk add --update python3 py-pip'
-                sh 'pip install Flask --break-system-packages'
+                sh 'pip install datetime --break-system-packages'
                 sh 'pip install xmlrunner --break-system-packages'
                 sh 'python3 app_test.py'
             } 
