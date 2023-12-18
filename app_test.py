@@ -1,6 +1,6 @@
 import unittest
 import datetime
-from app import DictionaryList as tested_app
+from app import DictionaryList
 from unittest.mock import patch
 import io
 import json
