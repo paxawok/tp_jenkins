@@ -51,12 +51,14 @@ pipeline{
         }
         stage('Create Docker image') {
             steps {
-                sh "docker build -t paxawok/jenkins_l3:latest -f Dockerfile ."
+                dir ('docker/jenkins_l3'){
+                    sh "docker build -t paxawok/jenkins_l3:latest -f Dockerfile ."
+                }
             }
         }
         stage('Docker Push') {
             steps {
-                sh "docker push paxawok/jenkins_l3"
+                sh "docker push paxawok/jenkins_l3:latest"
             }
         }
     }
