@@ -41,19 +41,23 @@ pipeline{
                 }
             }     
         }
-        stage('Build and Push Docker Image') {
+        stage('Docker login') {
             agent any
             steps {
-                script {
-                    // Build Docker image
-                    def DOCKER_IMAGE = 'paxawok/jenkins_l3'
-                    sh "docker build -t ${DOCKER_IMAGE} -f Dockerfile ."
-
-                    withCredentials([usernamePassword(credentialsId: 'ilovemyPASSWORD', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
-                        sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
-                    }
-                    sh "docker push ${DOCKER_IMAGE}"
+                withCredentials([usernamePassword(credentialsId: 'ilovemyPASSWORD', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
+                    sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
                 }
+            }
+        }
+        stage('Create Docker image') {
+            steps {
+                def DOCKER_IMAGE = 'paxawok/jenkins_l3'
+                sh "docker build -t ${DOCKER_IMAGE}:latest -f Dockerfile ."
+            }
+        }
+        stage('Docker Push') {
+            steps {
+                sh "docker push ${DOCKER_IMAGE}"
             }
         }
     }
