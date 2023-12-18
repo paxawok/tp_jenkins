@@ -42,7 +42,6 @@ pipeline{
             }     
         }
         stage('Docker login') {
-            agent any
             steps {
                 withCredentials([usernamePassword(credentialsId: 'ilovemyPASSWORD', passwordVariable: 'DOCKER_PASSWORD', usernameVariable: 'DOCKER_USERNAME')]) {
                     sh 'docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD'
@@ -50,10 +49,9 @@ pipeline{
             }
         }
         stage('Create Docker image') {
+            agent any
             steps {
-                dir ('docker/jenkins_l3'){
-                    sh "docker build -t paxawok/jenkins_l3:latest -f Dockerfile ."
-                }
+                sh "docker build -t paxawok/jenkins_l3:latest -f Dockerfile ."
             }
         }
         stage('Docker Push') {
