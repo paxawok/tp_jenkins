@@ -42,6 +42,7 @@ pipeline{
             }     
         }
         stage('Build and Push Docker Image') {
+            agent any
             steps {
                 script {
                     // Build Docker image
