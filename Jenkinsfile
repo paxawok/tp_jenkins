@@ -26,7 +26,7 @@ pipeline{
             }
             steps{
                 sh 'apk add --update python3 py-pip'
-                sh 'pip install unittest2==1.1.0'
+                //sh 'pip install unittest'
                 sh 'pip install Flask'
                 sh 'pip install xmlrunner'
                 sh 'python3 app_test.py'
