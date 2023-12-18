@@ -27,7 +27,7 @@ pipeline{
             steps {
                 script {
                     sh 'apk add --update python3 py3-pip'
-                    sh 'pip install Flask xmlrunner'
+                    //sh 'pip install Flask xmlrunner'
                     sh 'python3 app_test.py'
                 }
             }
